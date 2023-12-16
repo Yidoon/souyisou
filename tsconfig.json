@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "lib": ["es2016", "DOM", "DOM.Iterable"],
+    "allowJs": false,
+    "useDefineForClassFields": true,
+    "module": "esnext",
+    "target": "es2015",
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "sourceMap": false,
+    "rootDir": ".",
+    "moduleResolution": "node",
+    "jsx": "react-jsx",
+    "typeRoots": ["node_modules/@types/", "node_modules"],
+    "resolveJsonModule": true,
+    "types": ["chrome"]
+  },
+  "include": ["src"]
+}
