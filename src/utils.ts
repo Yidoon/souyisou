@@ -1,3 +1,5 @@
+import { languages } from "./constants";
+
 export function getSearchValue() {
   const searchFormDiv = document.querySelector("#searchform");
   const searchForm = searchFormDiv?.querySelector("form");
@@ -18,4 +20,10 @@ export function mockSearchClick() {
   const searchSubmitBtn = searchForm?.querySelector('button[type="submit"]');
   // @ts-ignore
   searchSubmitBtn?.click();
+}
+
+
+export function getLanguageLabel(value: string) {
+  const language = languages.find((item) => item.value === value);
+  return language?.label;
 }

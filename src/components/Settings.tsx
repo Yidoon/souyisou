@@ -1,7 +1,7 @@
 import { Form, SelectProps, Select, Input } from "antd";
 import { BasicSettings, PopupContext } from "../popup/store";
 import { useContext, useEffect, useState } from "react";
-import { platforms } from "../constants";
+import { languages, platforms } from "../constants";
 import { useRecordHotkeys } from "react-hotkeys-hook";
 
 const Option = Select.Option;
@@ -122,11 +122,10 @@ export function HotKeyRecorder(props: Props) {
 }
 
 export function TargetLangSelector(props: SelectProps) {
-  const options = [{ label: "English", value: "en" }];
 
   return (
     <Select placeholder="请选择目标语言" {...props}>
-      {options.map((option) => (
+      {languages.map((option) => (
         <Option key={option.value} value={option.value}>
           {option.label}
         </Option>

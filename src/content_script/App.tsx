@@ -1,7 +1,8 @@
 import { useEffect, useState } from "react";
 import { KEY_BASIC_SETTINGS, KEY_PLATFORM_SETTINGS } from "../constants";
-import { BasicSettings, PlatformSettings } from "../types";
+import { BasicSettings, PlatformSettings, TranslateResult } from "../types";
 import { translate as openAITranslate } from "../provider/openai";
+import { translate as caiyunTranslate } from "../provider/caiyun";
 import { getSearchValue, mockSearchClick, setInputValue } from "../utils";
 import "./app.css";
 
@@ -39,20 +40,23 @@ export default function App() {
       return;
     }
     souyisouIcon?.classList.add("rotate");
-    switch (platform) {
-      case "openai":
-        const res = await openAITranslate({
-          text: searchValue,
-          apiModel: apiModel as string,
-          apiKey: apiKey as string,
-        });
-        setInputValue(res as string);
-        souyisouIcon?.classList.remove("rotate");
-        mockSearchClick();
-        break;
-      default:
-        console.log("");
+    let res = {} as TranslateResult;
+
+    if (platform === "openai") {
+      res = (await openAITranslate({
+        query: searchValue,
+      })) as TranslateResult;
     }
+    if (platform === "caiyun") {
+      res = (await caiyunTranslate({
+        query: searchValue,
+      })) as TranslateResult;
+    }
+    if (res?.result) {
+      setInputValue(res.result as string);
+      mockSearchClick();
+    }
+    souyisouIcon?.classList.remove("rotate");
   };
 
   const bindHotkeyEvent = (key: string) => {

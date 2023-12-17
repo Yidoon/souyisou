@@ -1,12 +1,24 @@
 import OpenAI from "openai";
+import { KEY_BASIC_SETTINGS, KEY_PLATFORM_SETTINGS } from "../constants";
+import { getLanguageLabel } from "../utils";
 
 interface Options {
-  text: string;
-  apiModel: string;
-  apiKey: string;
+  query: string;
 }
 export async function translate(options: Options) {
-  const { text, apiKey, apiModel } = options;
+  const { query } = options;
+
+  const results = await chrome.storage.local.get([
+    KEY_PLATFORM_SETTINGS,
+    KEY_BASIC_SETTINGS,
+  ]);
+
+  const { platformSettings, basicSettings } = results || {};
+  const apiKey = platformSettings.openai.apiKey;
+  const apiModel = platformSettings.openai.apiModel;
+
+  const targetLanguage = getLanguageLabel(basicSettings.targetLanguage);
+  console.log(targetLanguage, "targetLanguage");
 
   const openai = new OpenAI({
     apiKey: apiKey,
@@ -17,15 +29,21 @@ export async function translate(options: Options) {
       messages: [
         {
           role: "system",
-          content:
-            "你是一个翻译引擎，请翻译给出的文本，将给到的文本翻译成英文,只需要翻译不需要解释。",
+          content: `你是一个翻译引擎，请翻译给出的文本，将给到的文本翻译成${targetLanguage},只需要翻译不需要解释。`,
         },
-        { role: "user", content: `${text}` },
+        { role: "user", content: `${query}` },
       ],
       model: apiModel || "gpt-3.5-turbo",
     });
-    return completion.choices?.[0]?.message?.content;
+    return {
+      result: completion.choices?.[0]?.message?.content || "",
+      error: "",
+    };
   } catch (error) {
     console.log(error, "openai error");
+    return {
+      result: "",
+      error: error,
+    };
   }
 }

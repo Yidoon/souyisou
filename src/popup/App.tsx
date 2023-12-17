@@ -14,7 +14,7 @@ const OpenAIForm = () => {
     setPlatformSettings((originValue) => ({
       ...originValue,
       openai: {
-        ...originValue.openai,
+        ...(originValue.openai || {}),
         [changedValue[0].name]: changedValue[0].value,
       },
     }));
@@ -47,13 +47,36 @@ const OpenAIForm = () => {
   );
 };
 
-const text = (
-  <p style={{ paddingLeft: 24 }}>
-    A dog is a type of domesticated animal. Known for its loyalty and
-    faithfulness, it can be found as a welcome guest in many households across
-    the world.
-  </p>
-);
+const CaiyunForm = () => {
+  const { platformSettings, setPlatformSettings } = useContext(PopupContext);
+  const handleFieldsChange = (changedValue: any) => {
+    setPlatformSettings((originValue) => ({
+      ...originValue,
+      caiyun: {
+        ...(originValue.caiyun || {}),
+        [changedValue[0].name]: changedValue[0].value,
+      },
+    }));
+  };
+
+  return (
+    <Form<OpenAIFormData>
+      size="small"
+      onFieldsChange={handleFieldsChange}
+      initialValues={platformSettings.caiyun}
+    >
+      <Form.Item
+        label="Token"
+        name="token"
+        className="mb-2"
+        rules={[{ required: true }]}
+      >
+        <Input.Password placeholder="" />
+      </Form.Item>
+    </Form>
+  );
+};
+
 export default function App() {
   const items: CollapseProps["items"] = [
     {
@@ -62,14 +85,9 @@ export default function App() {
       children: <OpenAIForm />,
     },
     {
-      key: "youdao",
-      label: "有道",
-      children: text,
-    },
-    {
       key: "caiyun",
       label: "彩云",
-      children: text,
+      children: <CaiyunForm />,
     },
   ];
 

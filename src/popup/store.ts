@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { KEY_BASIC_SETTINGS, KEY_PLATFORM_SETTINGS } from "../constants";
+import { BasicSettings, PlatformSettings } from "../types";
 
 export interface PopupContextType {
   targetLanguage?: string;
@@ -9,21 +10,6 @@ export interface PopupContextType {
     apiKey?: string;
     apiModel?: string;
   };
-}
-
-export interface BasicSettings {
-  targetLanguage?: string;
-  hotkey?: string;
-  platform?: string;
-}
-
-export interface OpenAIFormData {
-  apiKey?: string;
-  apiModel?: string;
-}
-export interface PlatformSettings {
-  openai?: OpenAIFormData;
-  [key: string]: any;
 }
 
 export const PopupContext = React.createContext(
