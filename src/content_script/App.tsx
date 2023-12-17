@@ -1,47 +1,51 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { KEY_BASIC_SETTINGS, KEY_PLATFORM_SETTINGS } from "../constants";
 import { BasicSettings, PlatformSettings, TranslateResult } from "../types";
 import { translate as openAITranslate } from "../provider/openai";
 import { translate as caiyunTranslate } from "../provider/caiyun";
-import { getSearchValue, mockSearchClick, setInputValue } from "../utils";
+import {
+  controlSouyisouAppVisible,
+  getSearchValue,
+  mockSearchClick,
+  setInputValue,
+} from "../utils";
 import "./app.css";
+import { EVENT_CHANGE_HOTKEY, EVENT_TOGGLE_ENABLE_SWITCH } from "../eventsType";
+import hotkeys from "hotkeys-js";
 
 export default function App() {
-  const [platformSettings, setPlatformSettings] = useState<PlatformSettings>(
-    {}
-  );
-  const [basicSettings, setBasicSettings] = useState<BasicSettings>({});
+  const hotkeyRef = useRef("");
+  const loadingRef = useRef(false);
 
-  const initData = async () => {
+  const init = async () => {
     const results = await chrome.storage.local.get([
       KEY_PLATFORM_SETTINGS,
       KEY_BASIC_SETTINGS,
     ]);
 
-    const { platformSettings, basicSettings } = results || {};
-    setPlatformSettings(platformSettings);
-    setBasicSettings(basicSettings);
-    if (basicSettings.hotkey) {
-      bindHotkeyEvent(basicSettings.hotkey);
-    }
+    const { basicSettings } = results || {};
+    hotkeyRef.current = basicSettings.hotkey;
+    bindHotKey(basicSettings.hotkey);
+    controlSouyisouAppVisible(basicSettings.enable === false ? false : true);
   };
 
   const handleClick = async () => {
+    if (loadingRef.current) {
+      return;
+    }
+    const { basicSettings } = await chrome.storage.local.get([
+      KEY_BASIC_SETTINGS,
+    ]);
     const platform = basicSettings.platform;
     const souyisouIcon = document.querySelector("#souyisou-icon");
     const searchValue = getSearchValue();
-    console.log(platformSettings, "platformSettings");
-
     if (!searchValue) {
-      return;
-    }
-    const { apiModel, apiKey } = platformSettings?.openai || {};
-    if (!apiModel || !apiKey) {
       return;
     }
     souyisouIcon?.classList.add("rotate");
     let res = {} as TranslateResult;
 
+    loadingRef.current = true;
     if (platform === "openai") {
       res = (await openAITranslate({
         query: searchValue,
@@ -57,31 +61,29 @@ export default function App() {
       mockSearchClick();
     }
     souyisouIcon?.classList.remove("rotate");
+    loadingRef.current = false;
   };
-
-  const bindHotkeyEvent = (key: string) => {
-    window.addEventListener("keydown", (e) => {
-      console.log(e.key);
+  const bindHotKey = (hotkey: string) => {
+    hotkeys(hotkey, () => {
+      handleClick();
     });
   };
-  const bindStorageEvent = () => {
-    chrome.storage.onChanged.addListener((changes, namespace) => {
-      Object.keys(changes).forEach((key) => {
-        if (key === KEY_PLATFORM_SETTINGS) {
-          const { newValue } = changes[key];
-          setPlatformSettings(newValue as PlatformSettings);
-        }
-        if (key === KEY_BASIC_SETTINGS) {
-          const { newValue } = changes[key];
-          setBasicSettings(newValue as BasicSettings);
-        }
-      });
+  const bindEvent = async () => {
+    chrome.runtime.onMessage.addListener((requeset) => {
+      if (requeset.type === EVENT_TOGGLE_ENABLE_SWITCH) {
+        controlSouyisouAppVisible(requeset.data);
+      }
+      if (requeset.type === EVENT_CHANGE_HOTKEY) {
+        hotkeys.unbind(hotkeyRef.current);
+        bindHotKey(requeset.data);
+        hotkeyRef.current = requeset.data;
+      }
     });
   };
 
   useEffect(() => {
-    initData();
-    bindStorageEvent();
+    init();
+    bindEvent();
   }, []);
 
   return (

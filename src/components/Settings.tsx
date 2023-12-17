@@ -1,14 +1,24 @@
 import { Form, SelectProps, Select, Input } from "antd";
-import { BasicSettings, PopupContext } from "../popup/store";
+import { PopupContext } from "../popup/store";
 import { useContext, useEffect, useState } from "react";
 import { languages, platforms } from "../constants";
 import { useRecordHotkeys } from "react-hotkeys-hook";
+import { BasicSettings } from "../types";
+import { EVENT_CHANGE_HOTKEY } from "../eventsType";
 
 const Option = Select.Option;
 
 export function BasicSettingsForm() {
   const { basicSettings, setBasicSettings } = useContext(PopupContext);
   const handleFieldsChange = (changedValue: any) => {
+    if (changedValue[0].name[0] === "hotkey") {
+      chrome.tabs.query({ active: true, currentWindow: true }, function (tabs) {
+        chrome.tabs.sendMessage(tabs[0].id as number, {
+          type: EVENT_CHANGE_HOTKEY,
+          data: changedValue[0].value,
+        });
+      });
+    }
     setBasicSettings((originValue) => ({
       ...originValue,
       [changedValue[0].name]: changedValue[0].value,
@@ -26,7 +36,7 @@ export function BasicSettingsForm() {
         <TargetLangSelector />
       </Form.Item>
 
-      <Form.Item className="mb-2" label="设置快捷键" name="hotKey">
+      <Form.Item className="mb-2" label="设置快捷键" name="hotkey">
         <HotKeyRecorder />
       </Form.Item>
 
@@ -122,7 +132,6 @@ export function HotKeyRecorder(props: Props) {
 }
 
 export function TargetLangSelector(props: SelectProps) {
-
   return (
     <Select placeholder="请选择目标语言" {...props}>
       {languages.map((option) => (

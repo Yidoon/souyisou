@@ -16,6 +16,7 @@ export async function translate(options: Options) {
   const { platformSettings, basicSettings } = results || {};
   const apiKey = platformSettings.openai.apiKey;
   const apiModel = platformSettings.openai.apiModel;
+  if (!apiKey || !apiModel) return;
 
   const targetLanguage = getLanguageLabel(basicSettings.targetLanguage);
   console.log(targetLanguage, "targetLanguage");

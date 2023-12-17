@@ -16,7 +16,6 @@ window.addEventListener("load", function () {
     if (!root) {
       root = createRoot(el);
     }
-
     root.render(<App />);
   }
 });

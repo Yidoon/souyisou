@@ -1,6 +1,6 @@
 {
-  "name": "souyisou2",
-  "version": "1.0.0",
+  "name": "souyisou",
+  "version": "0.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -30,6 +30,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "antd": "^5.12.2",
+    "hotkeys-js": "^3.13.2",
     "mini-css-extract-plugin": "^2.7.6",
     "openai": "^4.21.0",
     "react": "^18.2.0",

@@ -3,6 +3,14 @@
   animation: spin 1s linear infinite;
 }
 
+.souyisou-display {
+  display: block;
+}
+
+.souyisou-hide {
+  display: none;
+}
+
 @-webkit-keyframes spin {
   from {
     -webkit-transform: rotateY(0deg);

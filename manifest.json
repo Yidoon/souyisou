@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "搜译搜",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Help you quickly switch language for searching. 帮助你快速的切换语言搜索",
   "icons": {
     "16": "icon.png",

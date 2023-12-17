@@ -22,8 +22,19 @@ export function mockSearchClick() {
   searchSubmitBtn?.click();
 }
 
-
 export function getLanguageLabel(value: string) {
   const language = languages.find((item) => item.value === value);
   return language?.label;
+}
+
+export function controlSouyisouAppVisible(enabled: boolean) {
+  const souyisouBtn = document.getElementById("souyisou-app");
+  if (!souyisouBtn) return;
+  if (enabled) {
+    souyisouBtn.classList.remove("souyisou-hide");
+    souyisouBtn.classList.add("souyisou-display");
+  } else {
+    souyisouBtn.classList.remove("souyisou-display");
+    souyisouBtn.classList.add("souyisou-hide");
+  }
 }
