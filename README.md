@@ -1,5 +1,6 @@
 
-![1c45493c-28b0-44d8-a365-cec7712f3e50 (2)](https://github.com/Yidoon/souyisou/assets/32826174/8462a8a9-7b6f-42b9-9087-f5b842c938eb)
+![a6b85285-1e9a-4965-873f-ccbbe471eb29 (2)](https://github.com/Yidoon/souyisou/assets/32826174/1851f3eb-cb0b-4201-a06a-6ce692aecd73)
+
 
 # 这个插件是用来干嘛的
 
