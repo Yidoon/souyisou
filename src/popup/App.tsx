@@ -46,6 +46,10 @@ const OpenAIForm = () => {
       >
         <OpenAIModelSelector />
       </Form.Item>
+
+      <a href="https://platform.openai.com/api-keys" target="_blank">
+        获取 API Key
+      </a>
     </Form>
   );
 };
@@ -76,6 +80,13 @@ const CaiyunForm = () => {
       >
         <Input.Password placeholder="" />
       </Form.Item>
+
+      <a
+        href="https://docs.caiyunapp.com/lingocloud/LingoCloud%20WEB/trans%20api/"
+        target="_blank"
+      >
+        获取 token
+      </a>
     </Form>
   );
 };
@@ -83,7 +94,9 @@ const CaiyunForm = () => {
 export default function App() {
   const { basicSettings, setBasicSettings } = useContext(PopupContext);
 
-  const [enable, setEnable] = useState<boolean>(!!basicSettings?.enable);
+  const [enable, setEnable] = useState<boolean>(
+    basicSettings?.enable === false ? false : true
+  );
 
   const items: CollapseProps["items"] = [
     {
@@ -109,8 +122,11 @@ export default function App() {
     });
   };
 
+  const handleClear = async () => {
+    await chrome.storage.local.clear();
+  };
   useEffect(() => {
-    setEnable(basicSettings?.enable as boolean);
+    setEnable(basicSettings?.enable === false ? false : true);
   }, []);
 
   return (
@@ -147,6 +163,9 @@ export default function App() {
         <div className="flex items-center gap-1">
           <Switch onChange={handleSwitchChange} checked={enable} />
         </div>
+        {/* <Button type="link" onClick={handleClear}>
+          清除数据
+        </Button> */}
         <div>
           <a
             className="pr-0"
