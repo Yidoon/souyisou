@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "搜译搜",
   "version": "0.1.0",
-  "description": "Help you quickly switch language for searching. 帮助你快速的切换语言搜索",
+  "description": "帮助你快速将当前的搜索语句翻译成目标语言，提高搜索效率，节省你宝贵的时间",
   "icons": {
     "16": "icon.png",
     "32": "icon.png",
@@ -26,5 +26,8 @@
     }
   ],
   "permissions": ["storage"],
-  "host_permissions": ["https://api.interpreter.caiyunai.com/*"]
+  "host_permissions": [
+    "https://api.interpreter.caiyunai.com/",
+    "https://*.openai.com/"
+  ]
 }
