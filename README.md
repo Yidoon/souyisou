@@ -6,7 +6,9 @@
 
 # 如何使用
 
-本插件还没有上架谷歌插件市场，还在审核中，可以直接 clone 当前仓库，然后在本地运行使用
+## 下载谷歌插件
+
+该插件目前已上架至谷歌插件市场，[点击前往下载](https://chromewebstore.google.com/detail/%E6%90%9C%E8%AF%91%E6%90%9C/pchbgpbloleegijinmglepjacfhmchom?hl=zh-CN&utm_source=ext_sidebar)
 
 ## 本地运行
 
